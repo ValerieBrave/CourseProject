@@ -12,9 +12,10 @@
 #define LEX_ID 'i'  //лексема дл€ идентификатора
 #define LEX_LITERAL 'l'  //лексема дл€ литерала
 #define LEX_FUNCTION 'f'  //лексема дл€ function
-#define LEX_NEW 'n'  //лексема дл€ declare
+#define LEX_IF 'I' // if
+#define LEX_NEW 'n'  //лексема дл€ new
 #define LEX_RETURN 'r'  //лексема дл€ return
-#define LEX_OUTPUT 'u'  //лексема дл€ print
+#define LEX_OUTPUT 'o'  //лексема дл€ output
 #define LEX_SEMOCOLON ';'  //лексема дл€ ;
 #define LEX_COMMA ','  //лексема дл€ ,
 #define LEX_LEFTBRACE '{'  //лексема дл€ {
@@ -42,7 +43,7 @@ namespace LT
 		int idxTI;                   // индекс в таблице идентификаторов или LT_TI_NULLIDX
 		int globalIndex;
 		char operation[3];
-		int priority;
+		
 		LITTYPE littype;
 		Entry()
 		{
@@ -50,9 +51,7 @@ namespace LT
 			this->sn = 0;
 			this->idxTI = -3;
 			this->globalIndex = 0;
-			//this->operation = ' ';
 			strcpy_s(this->operation, " ");
-			this->priority = -1;
 			this->littype = LITTYPE::NOT;
 		}
 		Entry(char lex, int line)
@@ -63,10 +62,9 @@ namespace LT
 			this->idxTI = -3;
 			this->globalIndex = 0;
 			strcpy_s(this->operation, " ");
-			this->priority = -1;
 			this->littype = LITTYPE::NOT;
 		}
-		Entry(char lex, int line, int glob, int idXTI, LITTYPE ltype, const char oper[3], int prio)
+		Entry(char lex, int line, int glob, int idXTI, LITTYPE ltype, const char oper[3])
 		{
 			this->lexema[0] = lex;
 			this->lexema[1] = 0x00;
@@ -75,7 +73,7 @@ namespace LT
 			this->idxTI = idXTI;
 			this->littype = ltype;
 			for (int i = 0; i < 3; i++) this->operation[i] = oper[i];
-			this->priority = prio;
+			
 		}
 	};
 	struct LexTable // экземпл€р таблицы лексем
