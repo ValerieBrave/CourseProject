@@ -18,14 +18,14 @@
 					  FST::NODE(1, FST::RELATION('e', 6)),\
 					  FST::NODE(1, FST::RELATION('r', 7)),\
 					  FST::NODE()
-#define GRAPH_STRING  FST::NODE(1, FST::RELATION('s', 1)),\
+#define GRAPH_STRINGTYPE  FST::NODE(1, FST::RELATION('s', 1)),\
 					  FST::NODE(1, FST::RELATION('t', 2)),\
 					  FST::NODE(1, FST::RELATION('r', 3)),\
 					  FST::NODE(1, FST::RELATION('i', 4)),\
 					  FST::NODE(1, FST::RELATION('n', 5)),\
 					  FST::NODE(1, FST::RELATION('g', 6)),\
 					  FST::NODE()
-#define GRAPH_SYMBOL  FST::NODE(1, FST::RELATION('s', 1)),\
+#define GRAPH_SYMBOLTYPE  FST::NODE(1, FST::RELATION('s', 1)),\
 					  FST::NODE(1, FST::RELATION('y', 2)),\
 					  FST::NODE(1, FST::RELATION('m', 3)),\
 					  FST::NODE(1, FST::RELATION('b', 4)),\
@@ -163,3 +163,20 @@ FST::RELATION('U', 2), FST::RELATION('V', 2), \
 FST::RELATION('W', 2), FST::RELATION('X', 2), \
 FST::RELATION('Y', 2), FST::RELATION('Z', 2)),\
 							FST::NODE()
+#define GRAPH_NUMBER FST::NODE(16, FST::RELATION('0', 1), FST::RELATION('1', 1),\
+								   FST::RELATION('2', 1), FST::RELATION('3', 1),\
+								   FST::RELATION('4', 1), FST::RELATION('5', 1),\
+								   FST::RELATION('6', 1), FST::RELATION('7', 1),\
+								   FST::RELATION('0', 2), FST::RELATION('1', 2),\
+								   FST::RELATION('2', 2), FST::RELATION('3', 2),\
+								   FST::RELATION('4', 2), FST::RELATION('5', 2),\
+								   FST::RELATION('6', 2), FST::RELATION('7', 2)),\
+					 FST::NODE(16, FST::RELATION('0', 1), FST::RELATION('1', 1),\
+								   FST::RELATION('2', 1), FST::RELATION('3', 1),\
+								   FST::RELATION('4', 1), FST::RELATION('5', 1),\
+								   FST::RELATION('6', 1), FST::RELATION('7', 1),\
+								   FST::RELATION('0', 2), FST::RELATION('1', 2),\
+								   FST::RELATION('2', 2), FST::RELATION('3', 2),\
+								   FST::RELATION('4', 2), FST::RELATION('5', 2),\
+								   FST::RELATION('6', 2), FST::RELATION('7', 2)),\
+								   FST::NODE()
