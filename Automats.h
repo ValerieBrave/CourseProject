@@ -163,7 +163,7 @@ FST::RELATION('U', 2), FST::RELATION('V', 2), \
 FST::RELATION('W', 2), FST::RELATION('X', 2), \
 FST::RELATION('Y', 2), FST::RELATION('Z', 2)),\
 							FST::NODE()
-#define GRAPH_NUMBER FST::NODE(16, FST::RELATION('0', 1), FST::RELATION('1', 1),\
+#define GRAPH_NUMBER8 FST::NODE(16, FST::RELATION('0', 1), FST::RELATION('1', 1),\
 								   FST::RELATION('2', 1), FST::RELATION('3', 1),\
 								   FST::RELATION('4', 1), FST::RELATION('5', 1),\
 								   FST::RELATION('6', 1), FST::RELATION('7', 1),\
@@ -180,3 +180,37 @@ FST::RELATION('Y', 2), FST::RELATION('Z', 2)),\
 								   FST::RELATION('4', 2), FST::RELATION('5', 2),\
 								   FST::RELATION('6', 2), FST::RELATION('7', 2)),\
 								   FST::NODE()
+#define GRAPH_NUMBER2 FST::NODE(4, FST::RELATION('0', 1), FST::RELATION('1', 1),\
+								   FST::RELATION('0', 2), FST::RELATION('1', 2)),\
+					  FST::NODE(4, FST::RELATION('0', 1), FST::RELATION('1', 1),\
+								   FST::RELATION('0', 2), FST::RELATION('1', 2)),\
+					  FST::NODE()
+#define GRAPH_SYMBOL  FST::NODE(1, FST::RELATION('\'', 1)),\
+					  FST::NODE(52, FST::RELATION('a', 2), FST::RELATION('A', 2),\
+									FST::RELATION('b', 2), FST::RELATION('B', 2),\
+									FST::RELATION('c', 2), FST::RELATION('C', 2),\
+									FST::RELATION('d', 2), FST::RELATION('D', 2),\
+									FST::RELATION('e', 2), FST::RELATION('E', 2),\
+									FST::RELATION('f', 2), FST::RELATION('F', 2),\
+									FST::RELATION('g', 2), FST::RELATION('G', 2),\
+									FST::RELATION('h', 2), FST::RELATION('H', 2),\
+									FST::RELATION('i', 2), FST::RELATION('I', 2),\
+									FST::RELATION('j', 2), FST::RELATION('J', 2),\
+									FST::RELATION('k', 2), FST::RELATION('K', 2),\
+									FST::RELATION('l', 2), FST::RELATION('L', 2),\
+									FST::RELATION('m', 2), FST::RELATION('M', 2),\
+									FST::RELATION('n', 2), FST::RELATION('N', 2),\
+									FST::RELATION('o', 2), FST::RELATION('O', 2),\
+									FST::RELATION('p', 2), FST::RELATION('P', 2),\
+									FST::RELATION('q', 2), FST::RELATION('Q', 2),\
+									FST::RELATION('r', 2), FST::RELATION('R', 2),\
+									FST::RELATION('s', 2), FST::RELATION('S', 2),\
+									FST::RELATION('t', 2), FST::RELATION('T', 2),\
+									FST::RELATION('u', 2), FST::RELATION('U', 2),\
+									FST::RELATION('v', 2), FST::RELATION('V', 2),\
+									FST::RELATION('w', 2), FST::RELATION('W', 2),\
+									FST::RELATION('x', 2), FST::RELATION('X', 2),\
+									FST::RELATION('y', 2), FST::RELATION('Y', 2),\
+									FST::RELATION('z', 2), FST::RELATION('Z', 2)),\
+					   FST::NODE(1, FST::RELATION('\'', 3)),\
+					   FST::NODE()

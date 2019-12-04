@@ -35,7 +35,7 @@
 
 namespace LT
 {
-	enum LITTYPE { NOT = 0, N = 1, S = 2, F = 3 };// тип литерала - не литерал \ численный \ строковый \ библиотечная функция
+	enum LITTYPE { NOT = 0, N = 1, S = 2, F = 3, SY=4 };// тип литерала - не литерал \ численный \ строковый \ библиотечная функция
 	struct Entry // строка таблицы лексем
 	{
 		char lexema[2]; // лексема
@@ -105,7 +105,7 @@ namespace LT
 				int ind = 0;
 				char *line = new char[100];
 				int cur_line = this->table[i].sn;
-				while (this->table[i].sn == cur_line)
+				while (this->table[i].sn == cur_line && i< this->current)
 				{
 					line[ind] = this->table[i].lexema[0];
 					ind++;

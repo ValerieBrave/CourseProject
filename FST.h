@@ -37,7 +37,7 @@ namespace FST
 		NODE* nodes;  // граф переходов
 		short* rstates; // возможные состояния автомата на данной позиции
 		int type; // тип автомата: лексема, идентификатор, литерал
-		enum { LEXEM = 1, IDENTIFICATOR = 2, STR_LITERAL = 3, NUM_LITERAL = 4, LIB_NAME = 5 };
+		enum { LEXEM = 1, IDENTIFICATOR = 2, STR_LITERAL = 3, NUM8_LITERAL = 4, NUM2_LITERAL = 5, SYM_LITERAL = 6, LIB_NAME = 7 };
 		FST()
 		{
 			this->string = "";

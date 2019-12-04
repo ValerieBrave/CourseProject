@@ -27,7 +27,7 @@ namespace Parse
 				case LEX_RIGHTHESIS: LEX_EQUALS; break;
 				case LEX_EQUALS:
 				{
-					if (*all_units.words[i + 1] == LEX_EQUALS)
+					if (i + 1 < all_units.size && *all_units.words[i + 1] == LEX_EQUALS)
 					{
 						LT::Add(Tab, LT::Entry(LEX_DEQUALS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "==")); 
 						i++;
@@ -36,7 +36,7 @@ namespace Parse
 				}break;
 				case LEX_NOT:
 				{
-					if (*all_units.words[i + 1] == LEX_EQUALS)
+					if (i + 1 < all_units.size && *all_units.words[i + 1] == LEX_EQUALS)
 					{
 						LT::Add(Tab, LT::Entry(LEX_NEQUALS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "!="));
 						i++;
@@ -45,7 +45,7 @@ namespace Parse
 				} break;
 				case '<':
 				{
-					if (*all_units.words[i + 1] == LEX_EQUALS)
+					if (i + 1 < all_units.size && *all_units.words[i + 1] == LEX_EQUALS)
 					{
 						LT::Add(Tab, LT::Entry(LEX_ELESS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "<="));
 						i++;
@@ -54,7 +54,7 @@ namespace Parse
 				}break;
 				case '>':
 				{
-					if (*all_units.words[i + 1] == LEX_EQUALS)
+					if (i + 1 < all_units.size && *all_units.words[i + 1] == LEX_EQUALS)
 					{
 						LT::Add(Tab, LT::Entry(LEX_EMORE, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, ">="));
 						i++;
@@ -86,7 +86,12 @@ namespace Parse
 							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::F, "  ")); // добавили в таблицу лексем
 							ids++;
 						}	break;
-						case FST::FST::NUM_LITERAL:
+						case FST::FST::NUM8_LITERAL:
+						{
+							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::N, "  ")); // добавили в таблицу лексем
+							ids++;
+						}	break;
+						case FST::FST::NUM2_LITERAL:
 						{
 							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::N, "  ")); // добавили в таблицу лексем
 							ids++;
@@ -94,6 +99,11 @@ namespace Parse
 						case FST::FST::STR_LITERAL:
 						{
 							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::S, "  ")); // добавили в таблицу лексем
+							ids++;
+						}	break;
+						case FST::FST::SYM_LITERAL:
+						{
+							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::SY, "  ")); // добавили в таблицу лексем
 							ids++;
 						}	break;
 						}
@@ -124,11 +134,23 @@ namespace Parse
 	{
 		unsigned char* rc = new unsigned char[strlen((const char*)in.text)];
 		int i = 0;
-		if (in.code[pos[0]] == In::IN::Q)
+		if (in.code[pos[0]] == In::IN::Q)//"
 		{
 			rc[0] = pos[0];
 			i++;
 			while (in.code[pos[i]] != In::IN::Q)
+			{
+				rc[i] = pos[i];
+				i++;
+			}
+			rc[i] = pos[i];
+			rc[i + 1] = 0x00;
+		}
+		else if (in.code[pos[0]] == In::IN::OQ)//'
+		{
+			rc[0] = pos[0];
+			i++;
+			while (in.code[pos[i]] != In::IN::OQ)
 			{
 				rc[i] = pos[i];
 				i++;
