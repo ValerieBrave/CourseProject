@@ -2,16 +2,14 @@
 #include <iostream>
 #include "Parse.h"
 #include "IT.h"
-//#include "Error.h"
 
-//#include "Automats.h"
 namespace Parse
 {
 	LT::LexTable auto_check(Words &all_units, FST::FST_lexems *auto_array, int auto_amount, In::IN in, Log::LOG lg)
 	{
 		/*Words all_units = find_lexems(in);*/  //помещаем все выделенные лексемы в all_units
 		LT::LexTable Tab = LT::Create(all_units.size);
-		int i = 0, line = 0, ids = 0; // i- по лексемам, line-строки, ids-количество идентификаторов
+		int i = 0, line = 0, ids = 0, exp=0; // i- по лексемам, line-строки, ids-количество идентификаторов, ids - для массива указателей на выражения
 		while (i < all_units.size) // по всем выделенным лексемам
 		{
 			if ((unsigned char)(*all_units.words[i]) == IN_CODE_ENDL) line++; // перенос строки
@@ -24,7 +22,7 @@ namespace Parse
 				case LEX_LEFTBRACE: LT::Add(Tab, LT::Entry(LEX_LEFTBRACE, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "  ")); break;
 				case LEX_BRACELET: LT::Add(Tab, LT::Entry(LEX_BRACELET, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "  ")); break;
 				case LEX_LEFTHESIS: LT::Add(Tab, LT::Entry(LEX_LEFTHESIS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "  ")); break;
-				case LEX_RIGHTHESIS: LEX_EQUALS; break;
+				case LEX_RIGHTHESIS:LT::Add(Tab, LT::Entry(LEX_RIGHTHESIS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "  ")); break;
 				case LEX_EQUALS:
 				{
 					if (i + 1 < all_units.size && *all_units.words[i + 1] == LEX_EQUALS)
@@ -32,7 +30,11 @@ namespace Parse
 						LT::Add(Tab, LT::Entry(LEX_DEQUALS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "==")); 
 						i++;
 					}
-					else LT::Add(Tab, LT::Entry(LEX_EQUALS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "= "));
+					else {
+						LT::Add(Tab, LT::Entry(LEX_EQUALS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "= "));
+						Tab.expressions[exp] = Tab.current; exp++;
+					}
+						
 				}break;
 				case LEX_NOT:
 				{
@@ -88,12 +90,12 @@ namespace Parse
 						}	break;
 						case FST::FST::NUM8_LITERAL:
 						{
-							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::N, "  ")); // добавили в таблицу лексем
+							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::N8, "  ")); // добавили в таблицу лексем
 							ids++;
 						}	break;
 						case FST::FST::NUM2_LITERAL:
 						{
-							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::N, "  ")); // добавили в таблицу лексем
+							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::N2, "  ")); // добавили в таблицу лексем
 							ids++;
 						}	break;
 						case FST::FST::STR_LITERAL:

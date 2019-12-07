@@ -13,6 +13,7 @@
 #define LEX_LITERAL 'l'  //лексема для литерала
 #define LEX_FUNCTION 'f'  //лексема для function
 #define LEX_IF 'I' // if
+#define LEX_ELSE 'E'// else
 #define LEX_NEW 'n'  //лексема для new
 #define LEX_RETURN 'r'  //лексема для return
 #define LEX_OUTPUT 'o'  //лексема для output
@@ -28,14 +29,14 @@
 #define LEX_EMORE 'M' // >=
 #define LEX_NOT '!'  //лексема для !
 #define LEX_EQUALS '='
-#define LEX_DEQUALS 'E' //==
+#define LEX_DEQUALS 'D' //==
 #define LEX_NEQUALS 'N' // !=
 #define LEX_STRCPY 'b' // библиотечные функции
 #define LEX_STRCAT 'b'
 
 namespace LT
 {
-	enum LITTYPE { NOT = 0, N = 1, S = 2, F = 3, SY=4 };// тип литерала - не литерал \ численный \ строковый \ библиотечная функция
+	enum LITTYPE { NOT = 0, N2 = 1, N8=2, S = 3, F = 4, SY=5 };// тип литерала - не литерал \ численный \ строковый \ библиотечная функция
 	struct Entry // строка таблицы лексем
 	{
 		char lexema[2]; // лексема
@@ -82,12 +83,14 @@ namespace LT
 		int size;                    // размер таблицы < maxsize
 		int current;				 // сколько лексем в таблице уже есть
 		Entry* table;                // массив строк таблицы лексем
+		int* expressions; // массив указателей на первые позиции выражений для польской нотации
 		LexTable()
 		{
 			this->maxsize = LT_MAXSIZE;
 			this->size = 0;
 			this->current = 0;
 			this->table = nullptr;
+			this->expressions = nullptr;
 		}
 		LexTable(int sz)
 		{
@@ -95,6 +98,7 @@ namespace LT
 			this->size = sz;
 			this->current = 0;
 			this->table = new Entry[sz];
+			this->expressions = new int[sz/2];
 		}
 		void print_coded(Log::LOG lg)
 		{
@@ -105,7 +109,7 @@ namespace LT
 				int ind = 0;
 				char *line = new char[100];
 				int cur_line = this->table[i].sn;
-				while (this->table[i].sn == cur_line && i< this->current)
+				while (this->table[i].sn == cur_line )
 				{
 					line[ind] = this->table[i].lexema[0];
 					ind++;

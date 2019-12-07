@@ -11,7 +11,7 @@
 #define TI_STR_MAXSIZE 255         
 namespace IT
 {
-	enum IDDATATYPE { INT = 1, STR = 2, DEF = 3 };  //типы данных идентификаторов: integer, string
+	enum IDDATATYPE { INT = 1, STR = 2, SYM = 3, DEF = 4 };  //типы данных идентификаторов: integer, string
 	enum IDTYPE { V = 1, F = 2, P = 3, L = 4, LIB = 5, DF = 6 };//типы идентификаторов: переменная, функция, параметр, литерал, библиотечная функция, дефолтное
 
 	struct Entry
@@ -31,6 +31,10 @@ namespace IT
 				unsigned char len;                //количество символов в строке типа string
 				char str[TI_STR_MAXSIZE - 1];//сама строка
 			} vstr;
+			struct
+			{
+				char sym;
+			} vsym;
 		} value;                        //
 		Entry()
 		{
