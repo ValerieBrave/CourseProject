@@ -63,6 +63,20 @@
 					  FST::NODE(1, FST::RELATION('r', 5)),\
 					  FST::NODE(1, FST::RELATION('n', 6)),\
 					  FST::NODE()
+#define GRAPH_STRCAT FST::NODE(1, FST::RELATION('s', 1)),\
+					 FST::NODE(1, FST::RELATION('t', 2)),\
+					 FST::NODE(1, FST::RELATION('r', 3)),\
+					 FST::NODE(1, FST::RELATION('c', 4)),\
+					 FST::NODE(1, FST::RELATION('a', 5)),\
+					 FST::NODE(1, FST::RELATION('t', 6)),\
+					 FST::NODE()
+#define GRAPH_STRCPY FST::NODE(1, FST::RELATION('s', 1)),\
+					 FST::NODE(1, FST::RELATION('t', 2)),\
+					 FST::NODE(1, FST::RELATION('r', 3)),\
+					 FST::NODE(1, FST::RELATION('c', 4)),\
+					 FST::NODE(1, FST::RELATION('p', 5)),\
+					 FST::NODE(1, FST::RELATION('y', 6)),\
+					 FST::NODE()
 #define GRAPH_IDENTIFICATOR FST::NODE(104, FST::RELATION('a', 1), FST::RELATION('b', 1),\
 										  FST::RELATION('c', 1), FST::RELATION('d', 1),\
 										  FST::RELATION('e', 1), FST::RELATION('f', 1),\

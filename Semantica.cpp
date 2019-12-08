@@ -209,6 +209,8 @@ namespace Sem
 					en.idtype = IT::IDTYPE::L;
 					fillInVsym(LT, en, all_units, i);
 					genSymName(en, LT.table[i].globalIndex);
+					LT.table[i].idxTI = IDTab.current;
+					IT::Add(IDTab, en);
 				}
 			}
 		}
