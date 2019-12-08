@@ -36,7 +36,7 @@
 
 namespace LT
 {
-	enum LITTYPE { NOT = 0, N2 = 1, N8=2, S = 3, F = 4, SY=5 };// тип литерала - не литерал \ численный \ строковый \ библиотечная функция
+	enum LITTYPE { NOT = 0, N2 = 1, N8=2, S = 3, F = 4, SY=5, DEF=6 };// тип литерала - не литерал \ численный \ строковый \ библиотечная функция
 	struct Entry // строка таблицы лексем
 	{
 		char lexema[2]; // лексема
@@ -50,7 +50,7 @@ namespace LT
 		{
 			*this->lexema = 0x00;
 			this->sn = 0;
-			this->idxTI = -3;
+			this->idxTI = LT_TI_NULLIDX;
 			this->globalIndex = 0;
 			strcpy_s(this->operation, " ");
 			this->littype = LITTYPE::NOT;
@@ -60,10 +60,10 @@ namespace LT
 			this->lexema[0] = lex;
 			this->lexema[1] = 0x00;
 			this->sn = line;
-			this->idxTI = -3;
+			this->idxTI = LT_TI_NULLIDX;
 			this->globalIndex = 0;
 			strcpy_s(this->operation, " ");
-			this->littype = LITTYPE::NOT;
+			this->littype = LITTYPE::DEF;
 		}
 		Entry(char lex, int line, int glob, int idXTI, LITTYPE ltype, const char oper[3])
 		{
@@ -83,14 +83,19 @@ namespace LT
 		int size;                    // размер таблицы < maxsize
 		int current;				 // сколько лексем в таблице уже есть
 		Entry* table;                // массив строк таблицы лексем
-		int* expressions; // массив указателей на первые позиции выражений для польской нотации
+		struct Expr
+		{
+			int current;
+			int* expr;
+		}expressions; // массив указателей на первые позиции выражений для польской нотации
 		LexTable()
 		{
 			this->maxsize = LT_MAXSIZE;
 			this->size = 0;
 			this->current = 0;
 			this->table = nullptr;
-			this->expressions = nullptr;
+			this->expressions.expr = nullptr;
+			this->expressions.current = 0;
 		}
 		LexTable(int sz)
 		{
@@ -98,7 +103,8 @@ namespace LT
 			this->size = sz;
 			this->current = 0;
 			this->table = new Entry[sz];
-			this->expressions = new int[sz/2];
+			this->expressions.expr = new int[sz/2];
+			this->expressions.current = 0;
 		}
 		void print_coded(Log::LOG lg)
 		{

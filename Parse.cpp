@@ -32,7 +32,7 @@ namespace Parse
 					}
 					else {
 						LT::Add(Tab, LT::Entry(LEX_EQUALS, line, i, LT_TI_NULLIDX, LT::LITTYPE::NOT, "= "));
-						Tab.expressions[exp] = Tab.current; exp++;
+						Tab.expressions.expr[exp] = Tab.current; exp++; Tab.expressions.current++;
 					}
 						
 				}break;
