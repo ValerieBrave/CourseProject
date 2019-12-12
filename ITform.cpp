@@ -134,21 +134,19 @@ namespace Form
 					{
 						strcpy_s(en.id, (const char*)all_units.words[LT.table[i].globalIndex]);
 						IT::IDTYPE idtype = define_type(LT, i);
-						//IT::IDDATATYPE iddatatype = define_dtype(all_units, LT, i);
 						if (idtype == IT::IDTYPE::F) strcpy_s((char*)en.fullID, 2 * ID_MAXSIZE - 1, (const char*)en.id);
 						en.idxfirstLE = LT.table[i].sn;
 						en.LTind = i;
 						en.iddatatype = IT::IDDATATYPE::DEF;
-						en.idtype = IT::IDTYPE::DF;
+						if (idtype == IT::IDTYPE::F)
+						{
+							en.idtype = IT::IDTYPE::F;
+							IDTab.funcs[IDTab.fcurrent] = IT::Func(i, all_units.words[LT.table[i].globalIndex]);
+							en.Funcind = IDTab.fcurrent;
+							IDTab.fcurrent++;
+						}
+						else en.idtype = IT::IDTYPE::DF;
 						en.value.vint = TI_INT_DEFAULT;
-						// все уходит в семантику
-						//if (iddatatype == IT::IDDATATYPE::INT && !(idtype == IT::IDTYPE::F || idtype == IT::IDTYPE::LIB)) en.value.vint = TI_INT_DEFAULT;
-						//else if (iddatatype == IT::IDDATATYPE::STR && !(idtype == IT::IDTYPE::F || idtype == IT::IDTYPE::LIB))
-						//{
-						//	//strcpy_s(en.value.vstr.str, (const char*)TI_STR_DEFAULT);
-						//	en.value.vstr.str[0] = TI_STR_DEFAULT;
-						//	en.value.vstr.len = (unsigned char)strlen((const char*)en.value.vstr.str);
-						//}
 						LT.table[i].idxTI = IDTab.current;
 						IT::Add(IDTab, en);
 					}

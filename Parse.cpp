@@ -83,7 +83,7 @@ namespace Parse
 							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::NOT, "  ")); // добавили в таблицу лексем
 							ids++;
 						}	break;
-						case FST::FST::LIB_NAME:
+						case FST::FST::LIB_NAME: // strcpy + strcat
 						{
 							LT::Add(Tab, LT::Entry(auto_array[k].lexem[0], line, i, ids, LT::LITTYPE::F, "  ")); // добавили в таблицу лексем
 							ids++;

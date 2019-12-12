@@ -18,6 +18,7 @@ namespace IT
 	{
 		int idxfirstLE;                   // индекс первой строки в таблице лексем
 		int LTind;							//  индекс первого появления в таблице лексем
+		int Funcind;						// Индекс функции в таблице функций
 		char id[ID_MAXSIZE + 1];              // идентификатор (автоматически усекается до ID_MAXSIZE)
 		IDDATATYPE iddatatype;            // тип данных
 		IDTYPE idtype;                    // тип идентификатора
@@ -40,6 +41,7 @@ namespace IT
 		{
 			this->idxfirstLE = 0;
 			this->LTind = 0;
+			this->Funcind = 0;
 			*this->id = 0x00;
 			this->iddatatype = IDDATATYPE::INT;
 			this->idtype = IDTYPE::V;
@@ -50,20 +52,62 @@ namespace IT
 			*this->value.vstr.str = 0x00;
 		}
 	};
+	enum PARMTYPE { I = 1, SM = 2, SR = 3, NO = 4 };
+	struct Func
+	{
+		int LTposition; //LT
+		unsigned char* name; //
+		int params; // колво параметров
+		PARMTYPE ret;
+		PARMTYPE* types;
+		Func()
+		{
+			this->LTposition = 0;
+			this->name = new unsigned char[6];
+			this->params = 0;
+			this->ret = PARMTYPE::NO;
+			this->types = new PARMTYPE[5];
+		}
+		Func(int pos, unsigned char* name)
+		{
+			this->LTposition = pos;
+			this->name = new unsigned char[6];
+			strcpy_s((char*)this->name, 6, (const char*)name);
+			this->ret = PARMTYPE::NO;
+			this->params = 0;
+			this->types = new PARMTYPE[5];
+		}
+		Func(int pos, unsigned char* nm, int par, PARMTYPE ret, PARMTYPE* prms)
+		{
+			this->LTposition = pos;
+			this->name = new unsigned char[6];
+			strcpy_s((char*)this->name, 6, (const char*)nm);
+			this->params = par;
+			this->ret = ret;
+			this->types = new PARMTYPE[5];
+			for (int i = 0; i < par; i++) this->types[i] = prms[i];
+		}
+	};
 	struct IdTable
 	{
 		int capacity = IT_MAXSIZE; // емкость
 		int current; // текущий размер
 		Entry* table; // строки таблицы
+		int fcurrent; // funcs current
+		Func* funcs;
 		IdTable()
 		{
 			this->current = 0;
 			this->table = new Entry[this->capacity];
+			this->funcs = new Func[this->capacity / 2];
+			this->fcurrent = 0;
 		}
 		IdTable(int size)
 		{
 			this->current = 0;
 			this->table = new Entry[size];
+			this->funcs = new Func[size/2];
+			this->fcurrent = 0;
 		}
 		void print(Log::LOG lg)
 		{

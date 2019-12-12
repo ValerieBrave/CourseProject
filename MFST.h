@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "LT.h"
 #include "GRB.h"
+#include "Error.h"
 #define MFST_DIAGN_MAXSIZE 2*ERROR_MAXSIZE_MESSAGE
 #define MFST_DIAGN_NUMBER 3
 #define MFST_TRACE_START std::cout<<std::setw(4)<<std::left<<"иру"<<":" \
@@ -268,6 +269,7 @@ namespace MFST
 			case NS_ERROR: MFST_TRACE4("-------->NS_ERRROR") break;
 			case SURPRISE: MFST_TRACE4("-------->SURPRISE") break;
 			}
+			if (!rc) throw ERROR_THROW(607)
 			return rc;
 		}
 		void printrules()
