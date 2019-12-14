@@ -58,33 +58,33 @@ namespace IT
 		int LTposition; //LT
 		unsigned char* name; //
 		int params; // колво параметров
-		PARMTYPE ret;
-		PARMTYPE* types;
+		IDDATATYPE ret;
+		IDDATATYPE* types;
 		Func()
 		{
 			this->LTposition = 0;
 			this->name = new unsigned char[6];
 			this->params = 0;
-			this->ret = PARMTYPE::NO;
-			this->types = new PARMTYPE[5];
+			this->ret = IDDATATYPE::DEF;
+			this->types = new IDDATATYPE[5];
 		}
 		Func(int pos, unsigned char* name)
 		{
 			this->LTposition = pos;
 			this->name = new unsigned char[6];
 			strcpy_s((char*)this->name, 6, (const char*)name);
-			this->ret = PARMTYPE::NO;
+			this->ret = IDDATATYPE::DEF;
 			this->params = 0;
-			this->types = new PARMTYPE[5];
+			this->types = new IDDATATYPE[5];
 		}
-		Func(int pos, unsigned char* nm, int par, PARMTYPE ret, PARMTYPE* prms)
+		Func(int pos, unsigned char* nm, int par, IDDATATYPE ret, IDDATATYPE* prms)
 		{
 			this->LTposition = pos;
 			this->name = new unsigned char[6];
 			strcpy_s((char*)this->name, 6, (const char*)nm);
 			this->params = par;
 			this->ret = ret;
-			this->types = new PARMTYPE[5];
+			this->types = new IDDATATYPE[5];
 			for (int i = 0; i < par; i++) this->types[i] = prms[i];
 		}
 	};
@@ -147,6 +147,15 @@ namespace IT
 				}
 			} // fullID - имя идентификатора с префиксом, для учета области видимости
 			return in; // вернет индекс вхождения в таблицу ИДЕНТИФИКАТОРОВ
+		}
+		int Fhere(unsigned char* name)
+		{
+			int rc = -1;
+			for (int i = 0; i < this->fcurrent; i++)
+			{
+				if (!((const char*)name, (const char*)this->funcs[i].name)) rc = i;
+			}
+			return rc;
 		}
 	};
 	IdTable Create();

@@ -234,3 +234,110 @@ FST::RELATION('Y', 2), FST::RELATION('Z', 2)),\
 									FST::RELATION('z', 2), FST::RELATION('Z', 2)),\
 					   FST::NODE(1, FST::RELATION('\'', 3)),\
 					   FST::NODE()
+#define GRAPH_STRING FST::NODE(1, FST::RELATION('"', 1)),\
+				  FST::NODE(139, FST::RELATION(' ', 2), FST::RELATION('a', 2), FST::RELATION('b', 2),\
+								FST::RELATION('c', 2), FST::RELATION('d', 2),\
+								FST::RELATION('e', 2), FST::RELATION('f', 2),\
+								FST::RELATION('g', 2), FST::RELATION('h', 2),\
+								FST::RELATION('i', 2), FST::RELATION('j', 2),\
+								FST::RELATION('k', 2), FST::RELATION('l', 2),\
+								FST::RELATION('m', 2), FST::RELATION('n', 2),\
+								FST::RELATION('o', 2), FST::RELATION('p', 2),\
+								FST::RELATION('q', 2), FST::RELATION('r', 2),\
+								FST::RELATION('s', 2), FST::RELATION('t', 2),\
+								FST::RELATION('u', 2), FST::RELATION('v', 2),\
+								FST::RELATION('w', 2), FST::RELATION('x', 2),\
+								FST::RELATION('y', 2), FST::RELATION('z', 2),\
+FST::RELATION('à', 2), FST::RELATION('á', 2), FST::RELATION('â', 2), FST::RELATION('ã', 2),\
+FST::RELATION('ä', 2), FST::RELATION('å', 2), FST::RELATION('¸', 2), FST::RELATION('æ', 2),\
+FST::RELATION('ç', 2), FST::RELATION('è', 2), FST::RELATION('é', 2), FST::RELATION('ê', 2),\
+FST::RELATION('ë', 2), FST::RELATION('ì', 2), FST::RELATION('í', 2), FST::RELATION('î', 2),\
+FST::RELATION('ï', 2), FST::RELATION('ð', 2), FST::RELATION('ñ', 2), FST::RELATION('ò', 2),\
+FST::RELATION('î', 2), FST::RELATION('ô', 2), FST::RELATION('õ', 2), FST::RELATION('ö', 2),\
+FST::RELATION('÷', 2), FST::RELATION('ø', 2), FST::RELATION('ù', 2), FST::RELATION('ú', 2),\
+FST::RELATION('û', 2), FST::RELATION('ü', 2), FST::RELATION('ý', 2), FST::RELATION('þ', 2), FST::RELATION('ÿ', 2),\
+								FST::RELATION('0', 2), FST::RELATION('1', 2),\
+								FST::RELATION('2', 2), FST::RELATION('3', 2),\
+								FST::RELATION('4', 2), FST::RELATION('5', 2),\
+								FST::RELATION('6', 2), FST::RELATION('7', 2),\
+								FST::RELATION('8', 2), FST::RELATION('9', 2),\
+								FST::RELATION('a', 3), FST::RELATION('b', 3),\
+								FST::RELATION('c', 3), FST::RELATION('d', 3),\
+								FST::RELATION('e', 3), FST::RELATION('f', 3),\
+								FST::RELATION('g', 3), FST::RELATION('h', 3),\
+								FST::RELATION('i', 3), FST::RELATION('j', 3),\
+								FST::RELATION('k', 3), FST::RELATION('l', 3),\
+								FST::RELATION('m', 3), FST::RELATION('n', 3),\
+								FST::RELATION('o', 3), FST::RELATION('p', 3),\
+								FST::RELATION('q', 3), FST::RELATION('r', 3),\
+								FST::RELATION('s', 3), FST::RELATION('t', 3),\
+								FST::RELATION('u', 3), FST::RELATION('v', 3),\
+								FST::RELATION('w', 3), FST::RELATION('x', 3),\
+								FST::RELATION('y', 3), FST::RELATION('z', 3),\
+FST::RELATION('à', 3), FST::RELATION('á', 3), FST::RELATION('â', 3), FST::RELATION('ã', 3),\
+FST::RELATION('ä', 3), FST::RELATION('å', 3), FST::RELATION('¸', 3), FST::RELATION('æ', 3),\
+FST::RELATION('ç', 3), FST::RELATION('è', 3), FST::RELATION('é', 3), FST::RELATION('ê', 3),\
+FST::RELATION('ë', 3), FST::RELATION('ì', 3), FST::RELATION('í', 3), FST::RELATION('î', 3),\
+FST::RELATION('ï', 3), FST::RELATION('ð', 3), FST::RELATION('ñ', 3), FST::RELATION('ò', 3),\
+FST::RELATION('î', 3), FST::RELATION('ô', 3), FST::RELATION('õ', 3), FST::RELATION('ö', 3),\
+FST::RELATION('÷', 3), FST::RELATION('ø', 3), FST::RELATION('ù', 3), FST::RELATION('ú', 3),\
+FST::RELATION('û', 3), FST::RELATION('ü', 3), FST::RELATION('ý', 3), FST::RELATION('þ', 3), FST::RELATION('ÿ', 3),\
+								FST::RELATION('0', 3), FST::RELATION('1', 3),\
+								FST::RELATION('2', 3), FST::RELATION('3', 3),\
+								FST::RELATION('4', 3), FST::RELATION('5', 3),\
+								FST::RELATION('6', 3), FST::RELATION('7', 3),\
+								FST::RELATION('8', 3), FST::RELATION('9', 3)),\
+				  FST::NODE(139,FST::RELATION(' ', 2), FST::RELATION('a', 2), FST::RELATION('b', 2),\
+								FST::RELATION('c', 2), FST::RELATION('d', 2),\
+								FST::RELATION('e', 2), FST::RELATION('f', 2),\
+								FST::RELATION('g', 2), FST::RELATION('h', 2),\
+								FST::RELATION('i', 2), FST::RELATION('j', 2),\
+								FST::RELATION('k', 2), FST::RELATION('l', 2),\
+								FST::RELATION('m', 2), FST::RELATION('n', 2),\
+								FST::RELATION('o', 2), FST::RELATION('p', 2),\
+								FST::RELATION('q', 2), FST::RELATION('r', 2),\
+								FST::RELATION('s', 2), FST::RELATION('t', 2),\
+								FST::RELATION('u', 2), FST::RELATION('v', 2),\
+								FST::RELATION('w', 2), FST::RELATION('x', 2),\
+								FST::RELATION('y', 2), FST::RELATION('z', 2),\
+FST::RELATION('à', 2), FST::RELATION('á', 2), FST::RELATION('â', 2), FST::RELATION('ã', 2),\
+FST::RELATION('ä', 2), FST::RELATION('å', 2), FST::RELATION('¸', 2), FST::RELATION('æ', 2),\
+FST::RELATION('ç', 2), FST::RELATION('è', 2), FST::RELATION('é', 2), FST::RELATION('ê', 2),\
+FST::RELATION('ë', 2), FST::RELATION('ì', 2), FST::RELATION('í', 2), FST::RELATION('î', 2),\
+FST::RELATION('ï', 2), FST::RELATION('ð', 2), FST::RELATION('ñ', 2), FST::RELATION('ò', 2),\
+FST::RELATION('î', 2), FST::RELATION('ô', 2), FST::RELATION('õ', 2), FST::RELATION('ö', 2),\
+FST::RELATION('÷', 2), FST::RELATION('ø', 2), FST::RELATION('ù', 2), FST::RELATION('ú', 2),\
+FST::RELATION('û', 2), FST::RELATION('ü', 2), FST::RELATION('ý', 2), FST::RELATION('þ', 2), FST::RELATION('ÿ', 2),\
+								FST::RELATION('0', 2), FST::RELATION('1', 2),\
+								FST::RELATION('2', 2), FST::RELATION('3', 2),\
+								FST::RELATION('4', 2), FST::RELATION('5', 2),\
+								FST::RELATION('6', 2), FST::RELATION('7', 2),\
+								FST::RELATION('8', 2), FST::RELATION('9', 2),\
+								FST::RELATION('a', 3), FST::RELATION('b', 3),\
+								FST::RELATION('c', 3), FST::RELATION('d', 3),\
+								FST::RELATION('e', 3), FST::RELATION('f', 3),\
+								FST::RELATION('g', 3), FST::RELATION('h', 3),\
+								FST::RELATION('i', 3), FST::RELATION('j', 3),\
+								FST::RELATION('k', 3), FST::RELATION('l', 3),\
+								FST::RELATION('m', 3), FST::RELATION('n', 3),\
+								FST::RELATION('o', 3), FST::RELATION('p', 3),\
+								FST::RELATION('q', 3), FST::RELATION('r', 3),\
+								FST::RELATION('s', 3), FST::RELATION('t', 3),\
+								FST::RELATION('u', 3), FST::RELATION('v', 3),\
+								FST::RELATION('w', 3), FST::RELATION('x', 3),\
+								FST::RELATION('y', 3), FST::RELATION('z', 3),\
+FST::RELATION('à', 3), FST::RELATION('á', 3), FST::RELATION('â', 3), FST::RELATION('ã', 3),\
+FST::RELATION('ä', 3), FST::RELATION('å', 3), FST::RELATION('¸', 3), FST::RELATION('æ', 3),\
+FST::RELATION('ç', 3), FST::RELATION('è', 3), FST::RELATION('é', 3), FST::RELATION('ê', 3),\
+FST::RELATION('ë', 3), FST::RELATION('ì', 3), FST::RELATION('í', 3), FST::RELATION('î', 3),\
+FST::RELATION('ï', 3), FST::RELATION('ð', 3), FST::RELATION('ñ', 3), FST::RELATION('ò', 3),\
+FST::RELATION('î', 3), FST::RELATION('ô', 3), FST::RELATION('õ', 3), FST::RELATION('ö', 3),\
+FST::RELATION('÷', 3), FST::RELATION('ø', 3), FST::RELATION('ù', 3), FST::RELATION('ú', 3),\
+FST::RELATION('û', 3), FST::RELATION('ü', 3), FST::RELATION('ý', 3), FST::RELATION('þ', 3), FST::RELATION('ÿ', 3),\
+								FST::RELATION('0', 3), FST::RELATION('1', 3),\
+								FST::RELATION('2', 3), FST::RELATION('3', 3),\
+								FST::RELATION('4', 3), FST::RELATION('5', 3),\
+								FST::RELATION('6', 3), FST::RELATION('7', 3),\
+								FST::RELATION('8', 3), FST::RELATION('9', 3)),\
+				   FST::NODE(1, FST::RELATION('"', 4)),\
+				   FST::NODE()
