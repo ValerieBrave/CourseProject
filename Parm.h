@@ -3,7 +3,7 @@
 #define PARM_OUT  "-out:"  // ключ для файла объектного кода
 #define PARM_LOG  "-log:"   // ключ для файла журнала
 #define PARM_MAX_SIZE 300    //макс. длина строки параметра
-#define PARM_OUT_DEFAULT_EXT  ".out"  // расширение по умолчанию для объектного
+#define PARM_OUT_DEFAULT_EXT  ".asm"  // расширение по умолчанию для объектного
 #define PARM_LOG_DEFAULT_EXT  ".log"   // расширение по умолчанию для протокола
 
 namespace Parm

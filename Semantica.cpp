@@ -55,9 +55,12 @@ namespace Sem
 			}
 			else if (LT.table[i + 1].lexema[0] == LEX_LEFTHESIS)
 			{
-				IT::IDDATATYPE rettype = IT.funcs[IT.table[LT.table[i].idxTI].Funcind].ret;
-				if (IT.table[LT.table[i - 2].idxTI].iddatatype != rettype) throw ERROR_THROW_IN(701, LT.table[i].sn, i)
 				LT::Entry func = LT::GetEntry(LT, i); // вызов функции
+				IT::IDDATATYPE rettype;
+				if (IT.table[LT.table[i].idxTI].idtype != IT::IDTYPE::LIB) rettype = IT.funcs[IT.table[LT.table[i].idxTI].Funcind].ret;
+				else if (IT.Lhere(all_units.words[func.globalIndex]) != -1) rettype = IT.library[IT.Lhere(all_units.words[func.globalIndex])].ret;
+				if (IT.table[LT.table[i - 2].idxTI].iddatatype != rettype) throw ERROR_THROW_IN(701, LT.table[i].sn, i)
+				
 				if (LT.table[i + 2].lexema[0] == LEX_RIGHTHESIS ) // если у функции нет параметров - скобки уходят, появляется @ и #
 				{
 					if (IT.table[LT.table[i].idxTI].idtype == IT::IDTYPE::LIB)

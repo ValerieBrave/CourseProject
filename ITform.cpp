@@ -36,21 +36,17 @@ namespace Form
 	}
 	int checkNum8(LT::LexTable LT, Parse::Words all_units, int position)//текущая позиция в таблице лексем
 	{
-		
 		if (strlen((const char*)all_units.words[LT.table[position].globalIndex]) > 11) throw ERROR_THROW(116);
 		char* end;
 		long value = strtol((const char*)all_units.words[LT.table[position].globalIndex], &end, 8);
-		////long value = atol((const char*)all_units.words[LT.table[position].globalIndex]);
 		if (value > INT_MAX || value < INT_MIN) value = TI_INT_DEFAULT;
 		return (int)value;
 	}
 	int checkNum2(LT::LexTable LT, Parse::Words all_units, int position)//текущая позиция в таблице лексем
 	{
-
 		if (strlen((const char*)all_units.words[LT.table[position].globalIndex]) > 31) throw ERROR_THROW(116);
 		char* end;
 		long value = strtol((const char*)all_units.words[LT.table[position].globalIndex], &end, 2);
-		////long value = atol((const char*)all_units.words[LT.table[position].globalIndex]);
 		if (value > INT_MAX || value < INT_MIN) value = TI_INT_DEFAULT;
 		return (int)value;
 	}
@@ -102,7 +98,7 @@ namespace Form
 			{
 				prefix = all_units.words[LT.table[i].globalIndex];
 			}
-			else if (*LT.table[i].lexema == LEX_IF)
+			/*else if (*LT.table[i].lexema == LEX_IF)
 			{
 				if_flag = true;
 			}
@@ -119,7 +115,7 @@ namespace Form
 			{
 				if_flag = false;
 				if_pref = false;
-			}
+			}*/
 			if (LT.table[i].idxTI != TI_NULLIDX) // если элемент - идентификатор 
 			{
 				if (LT.table[i].littype == LT::LITTYPE::NOT) //НЕ ЛИТЕРАЛ => переменная либо имя функции
