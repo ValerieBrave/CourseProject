@@ -57,16 +57,23 @@ namespace Sem
 			{
 				IT::IDDATATYPE rettype = IT.funcs[IT.table[LT.table[i].idxTI].Funcind].ret;
 				if (IT.table[LT.table[i - 2].idxTI].iddatatype != rettype) throw ERROR_THROW_IN(701, LT.table[i].sn, i)
-
-					LT::Entry func = LT::GetEntry(LT, i); // вызов функции
-				if (LT.table[i + 2].lexema[0] == LEX_RIGHTHESIS) // если у функции нет параметров - скобки уходят, появляется @ и #
+				LT::Entry func = LT::GetEntry(LT, i); // вызов функции
+				if (LT.table[i + 2].lexema[0] == LEX_RIGHTHESIS ) // если у функции нет параметров - скобки уходят, появляется @ и #
 				{
-					if (IT.funcs[IT.table[LT.table[i].idxTI].Funcind].types[0]!= IT::IDDATATYPE::DEF) throw ERROR_THROW_IN(704, LT.table[i].sn, i)
+					if (IT.table[LT.table[i].idxTI].idtype == IT::IDTYPE::LIB)
+					{
+						int libind = IT.Lhere(all_units.words[func.globalIndex]);
+						if (libind != -1)
+						{
+							if(IT.library[libind].types[0] != IT::IDDATATYPE::DEF) throw  ERROR_THROW_IN(704, LT.table[i].sn, i)
+						}
+					}
+					else if (IT.funcs[IT.table[LT.table[i].idxTI].Funcind].types[0]!= IT::IDDATATYPE::DEF) throw ERROR_THROW_IN(704, LT.table[i].sn, i)
 					LT.table[i] = LT::Entry('@', LT.table[i].sn);
 					LT.table[i + 1] = func;
 					LT.table[i + 2] = LT::Entry('#', LT.table[i].sn);
 				}
-				else
+				else if(LT.table[i + 2].lexema[0] != LEX_RIGHTHESIS)
 				{
 					if (IT.funcs[IT.table[LT.table[i].idxTI].Funcind].types[0] == IT::IDDATATYPE::DEF) throw ERROR_THROW_IN(705, LT.table[i].sn, i)
 					int begin = i; i++;
@@ -74,7 +81,11 @@ namespace Sem
 					{
 						if (LT.table[i].lexema[0] == LEX_LITERAL || LT.table[i].lexema[0] == LEX_ID)
 						{
-							if(IT.table[LT.table[i].idxTI].iddatatype != IT.funcs[IT.table[LT.table[i].idxTI].Funcind].types[params.size()]) throw ERROR_THROW_IN(706, LT.table[i].sn, i)
+							int libind = IT.Lhere(all_units.words[func.globalIndex]);
+							if(IT.table[func.idxTI].idtype!=IT::IDTYPE::LIB &&
+								IT.table[LT.table[i].idxTI].iddatatype != IT.funcs[IT.table[func.idxTI].Funcind].types[params.size()]) throw ERROR_THROW_IN(706, func.sn, i)
+							else if(IT.table[func.idxTI].idtype == IT::IDTYPE::LIB && libind != -1 &&
+								IT.table[LT.table[i].idxTI].iddatatype != IT.library[libind].types[params.size()]) throw ERROR_THROW_IN(706, func.sn, i)
 							params.push(LT.table[i]);
 							int p = params.size();
 							int k = 0;
@@ -211,6 +222,7 @@ namespace Sem
 					IT.table[i].iddatatype = IT::IDDATATYPE::DEF;
 					define_params(IT.funcs[IT.table[i].Funcind], LT, IT, all_units);
 				}
+				
 			}
 		}
 

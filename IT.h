@@ -81,7 +81,7 @@ namespace IT
 		{
 			this->LTposition = pos;
 			this->name = new unsigned char[6];
-			strcpy_s((char*)this->name, 6, (const char*)nm);
+			strcpy_s((char*)this->name, 7, (const char*)nm);
 			this->params = par;
 			this->ret = ret;
 			this->types = new IDDATATYPE[5];
@@ -94,20 +94,26 @@ namespace IT
 		int current; // текущий размер
 		Entry* table; // строки таблицы
 		int fcurrent; // funcs current
+		int libcur;
 		Func* funcs;
+		Func* library;
 		IdTable()
 		{
 			this->current = 0;
 			this->table = new Entry[this->capacity];
-			this->funcs = new Func[this->capacity / 2];
+			this->funcs = new Func[this->capacity / 16];
+			this->library = new Func[this->capacity / 16];
 			this->fcurrent = 0;
+			this->libcur = 0;
 		}
 		IdTable(int size)
 		{
 			this->current = 0;
 			this->table = new Entry[size];
 			this->funcs = new Func[size/2];
+			this->library = new Func[size / 2];
 			this->fcurrent = 0;
+			this->libcur = 0;
 		}
 		void print(Log::LOG lg)
 		{
@@ -153,10 +159,20 @@ namespace IT
 			int rc = -1;
 			for (int i = 0; i < this->fcurrent; i++)
 			{
-				if (!((const char*)name, (const char*)this->funcs[i].name)) rc = i;
+				if (!strcmp((const char*)name, (const char*)this->funcs[i].name)) rc = i;
 			}
 			return rc;
 		}
+		int Lhere(unsigned char* name)
+		{
+			int rc = -1;
+			for (int i = 0; i < this->libcur; i++)
+			{
+				if (!strcmp((const char*)name, (const char*)this->library[i].name)) rc = i;
+			}
+			return rc;
+		}
+
 	};
 	IdTable Create();
 	void Add(IdTable &idtab, Entry en);
