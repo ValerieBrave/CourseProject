@@ -14,6 +14,9 @@ namespace Sem
 		{
 			std::stack <LT::Entry> params;
 			int i = LT.expressions.expr[k];
+			if(LT.table[i + 1].lexema[0] == LEX_SEMOCOLON && 
+				(IT.table[LT.table[i-2].idxTI].iddatatype==IT::IDDATATYPE::STR && (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR && LT.table[i].littype != LT::LITTYPE::S)))
+				throw ERROR_THROW_IN(707, LT.table[i].sn, i)
 			if (LT.table[i + 1].lexema[0] != LEX_SEMOCOLON &&
 				LT.table[i + 1].lexema[0] != LEX_LEFTHESIS) // если это не одна лексема и не вызов функции
 			{

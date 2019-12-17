@@ -98,24 +98,6 @@ namespace Form
 			{
 				prefix = all_units.words[LT.table[i].globalIndex];
 			}
-			/*else if (*LT.table[i].lexema == LEX_IF)
-			{
-				if_flag = true;
-			}
-			else if (*LT.table[i].lexema == LEX_ELSE)
-			{
-				sprintf_s((char*)prefix, 8, "%s%d", all_units.words[LT.table[i].globalIndex], i);
-			}
-			else if (*LT.table[i].lexema == LEX_LEFTBRACE && if_flag)
-			{
-				if_pref = true;
-				sprintf_s((char*)prefix, 8, "if%d", i);
-			}
-			else if (*LT.table[i].lexema == LEX_BRACELET && if_flag)
-			{
-				if_flag = false;
-				if_pref = false;
-			}*/
 			if (LT.table[i].idxTI != TI_NULLIDX) // если элемент - идентификатор 
 			{
 				if (LT.table[i].littype == LT::LITTYPE::NOT) //НЕ ЛИТЕРАЛ => переменная либо имя функции

@@ -73,7 +73,7 @@ namespace Gen
 				}break;
 				case IT::IDDATATYPE::STR:
 				{
-					sprintf_s(buf, 300, "%s  BYTE 256 dup(0)", IT.table[i].fullID);
+					sprintf_s(buf, 300, "%s  DWORD  ?", IT.table[i].fullID);
 				}break;
 				}
 				Out::WriteLine(out, (const char*)buf, "");
@@ -126,21 +126,175 @@ namespace Gen
 	{
 		int destination = i;
 		// после i стоит =
-		i += 2; // первая лексема выражения
-		if (LT.table[i + 1].lexema[0] == LEX_ID) // i=i;
+		i += 2; //i= первая лексема выражения
+		if (LT.table[i].lexema[0] == LEX_ID && LT.table[i + 1].lexema[0] == LEX_SEMOCOLON) // i=i;
 		{
+			char* buf = new char[50];
+			sprintf_s(buf, 50, "mov eax, %s \n mov %s, eax", IT.table[LT.table[i].idxTI].id, IT.table[LT.table[i -2].idxTI].id);
+			Out::WriteLine(out, (const char*)buf, "");
+			i += 3;																	// перескочили на следующую после выражения лексему
+		}
+		else if (LT.table[i].lexema[0] == LEX_LITERAL && LT.table[i + 1].lexema[0] == LEX_SEMOCOLON) //i=l;
+		{
+			char* buf = new char[50];
+			sprintf_s(buf, 50, "mov eax, %s \n mov %s, eax", IT.table[LT.table[i].idxTI].fullID, IT.table[LT.table[i - 2].idxTI].id);
+			Out::WriteLine(out, (const char*)buf, "");
+			i += 3;																	// перескочили на следующую после выражения лексему
+		}
+		else if ((LT.table[i].lexema[0] == LEX_ID || LT.table[i].lexema[0]==LEX_LITERAL )&&	(LT.table[i + 2].lexema[0] == LEX_LESS || LT.table[i + 2].lexema[0] == LEX_MORE ||
+				 LT.table[i + 2].lexema[0] == LEX_ELESS || LT.table[i + 2].lexema[0] == LEX_EMORE || LT.table[i + 2].lexema[0] == LEX_DEQUALS ||
+				 LT.table[i + 2].lexema[0] == LEX_NEQUALS))// i = i знак i;
+			 {
+				 switch (LT.table[i + 2].lexema[0])
+				 {
+					 case LEX_LESS: // + LEX_MORE
+					 {
+						 if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::INT)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 if(!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call int_less", "");
+							 else Out::WriteLine(out, "call int_more", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
+						 {
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call str_less", "");
+							 else Out::WriteLine(out, "call str_more", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call sym_less", "");
+							 else Out::WriteLine(out, "call sym_more", "");
+						 }
+						 Out::WriteLine(out, "mov ", (const char*)IT.table[LT.table[destination].idxTI].id, ", eax", "");
+						 i += 4;									// перешли на следующую после ; лексему
+					 }break;
+					 case LEX_ELESS:
+					 {
+						 if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::INT)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call int_eless", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
+						 {
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call str_eless", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call sym_eless", "");
+						 }
+						 Out::WriteLine(out, "mov ", (const char*)IT.table[LT.table[destination].idxTI].id, ", eax", "");
+						 i += 4;									// перешли на следующую после ; лексему
+					 }break;
+					 case LEX_EMORE:
+					 {
+						 if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::INT)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call int_emore", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
+						 {
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call str_emore", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call sym_emore", "");
+						 }
+						 Out::WriteLine(out, "mov ", (const char*)IT.table[LT.table[destination].idxTI].id, ", eax", "");
+						 i += 4;									// перешли на следующую после ; лексему
+					 }break;
+					 case LEX_DEQUALS:
+					 {
+						 if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::INT)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call int_equals", "");
+						 }
 
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
+						 {
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call str_equals", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call sym_equals", "");
+						 }
+						 Out::WriteLine(out, "mov ", (const char*)IT.table[LT.table[destination].idxTI].id, ", eax", "");
+						 i += 4;									// перешли на следующую после ; лексему
+					 }break;
+					 case LEX_NEQUALS:
+					 {
+						 if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::INT)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call int_nequals", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
+						 {
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call str_nequals", "");
+						 }
+						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
+						 {
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i + 1].idxTI].id, "");
+							 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+							 Out::WriteLine(out, "call sym_nequals", "");
+						 }
+						 Out::WriteLine(out, "mov ", (const char*)IT.table[LT.table[destination].idxTI].id, ", eax", "");
+						 i += 4;									// перешли на следующую после ; лексему
+					 }break;
+				 }
+			 }
+		else if (LT.table[i].lexema[0] == LEX_STRCAT)						// i = i..i@b###;+ LEX_STRCPY
+		{
+			while(LT.table[i].lexema[0] != LEX_SEMOCOLON)
+			{
+				// пушить в стек пока не нашли собачку, потом вызов функции и переход на следующую строку
+				i++;
+			}
 		}
 	}
 	void proc_body(int &i, Out::OUT out, LT::LexTable LT, IT::IdTable IT)
 	{
-		switch (LT.table[i].lexema[0])		//какая лексема стоит после {? n, i, o, I - варианты, n пропускаем
+		while (LT.table[i].lexema[0] != LEX_BRACELET)
 		{
-		case LEX_ID: // выражение
-		{
-
-		}break;
+			switch (LT.table[i].lexema[0])		//какая лексема стоит после {? n, i, o, I - варианты, n пропускаем
+			{
+			case LEX_NEW:
+			{
+				while (LT.table[i].lexema[0] != LEX_SEMOCOLON) i++;
+				i++;							//перешли на следующую строку
+			}break;
+			case LEX_ID: // выражение
+			{
+				expression(i, out, LT, IT);
+			}break;
+			}
 		}
+		
 	}
 	void code(Out::OUT out, LT::LexTable LT, IT::IdTable IT)
 	{
@@ -153,6 +307,7 @@ namespace Gen
 			{
 				proc_head(i, out, LT, IT); //остановились на закрывающей скобке )
 				i += 2;					   //перешли на первую после { лексему
+				proc_body(i, out, LT, IT);
 			}
 			else i++;
 		}

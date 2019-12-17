@@ -46,6 +46,7 @@ namespace Error
 		ERROR_ENTRY(704, "sem: Функция должна принимать параметры"),
 		ERROR_ENTRY(705, "sem: Функция не принимает параметров"),
 		ERROR_ENTRY(706, "sem: Фактические параметры вызываемой функции не совпадают с требуемыми по типу"),
+		ERROR_ENTRY(707, "sem: Переменной строчного типа нельзя присвоить значение"),
 		ERROR_ENTRY_NODEF10(720), ERROR_ENTRY_NODEF10(730), ERROR_ENTRY_NODEF10(740),ERROR_ENTRY_NODEF10(750),ERROR_ENTRY_NODEF10(760),
 		ERROR_ENTRY_NODEF10(770), ERROR_ENTRY_NODEF10(780), ERROR_ENTRY_NODEF10(790),
 		ERROR_ENTRY_NODEF100(800),ERROR_ENTRY_NODEF100(900)
