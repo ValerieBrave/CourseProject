@@ -135,7 +135,7 @@ namespace Sem
 		{
 			if (LT.table[pos].lexema[0] == 't')
 			{
-				IT.table[LT.table[pos].idxTI].idtype = IT::IDTYPE::P;
+				IT.table[LT.table[pos+1].idxTI].idtype = IT::IDTYPE::P;
 				if (!strcmp((const char*)all_units.words[LT.table[pos].globalIndex], "integer"))
 				{
 					IT.table[LT.table[pos + 1].idxTI].iddatatype = IT::IDDATATYPE::INT;
@@ -157,7 +157,7 @@ namespace Sem
 			}
 			else if (LT.table[pos].lexema[0] == LEX_LITERAL)
 			{
-				IT.table[LT.table[pos].idxTI].idtype = IT::IDTYPE::P;
+				IT.table[LT.table[pos].idxTI].idtype = IT::IDTYPE::L;
 				switch (LT.table[pos].littype)
 				{
 				case LT::LITTYPE::N2:

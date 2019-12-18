@@ -12,5 +12,7 @@ namespace Gen
 	void output(int &i, Out::OUT out, LT::LexTable LT, IT::IdTable IT);
 	void if_block(int &i, Out::OUT out, LT::LexTable LT, IT::IdTable IT);
 	void ret(int &i, Out::OUT out, LT::LexTable LT, IT::IdTable IT);
+	void proc_body(int &i, Out::OUT out, LT::LexTable LT, IT::IdTable IT);
+	void enter_body(int &i, Out::OUT out, LT::LexTable LT, IT::IdTable IT);
 	void Generate(Out::OUT out, LT::LexTable &LT, IT::IdTable &IT);
 }
