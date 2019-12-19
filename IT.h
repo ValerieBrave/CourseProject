@@ -94,7 +94,7 @@ namespace IT
 		int current; // текущий размер
 		Entry* table; // строки таблицы
 		int fcurrent; // funcs current
-		int libcur;
+		int libcur;		// lib current
 		Func* funcs;
 		Func* library;
 		IdTable()
