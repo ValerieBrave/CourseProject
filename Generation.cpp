@@ -7,7 +7,7 @@ namespace Gen
 		Out::WriteLine(out, ".586", "");
 		Out::WriteLine(out, ".MODEL flat, stdcall", "");
 		Out::WriteLine(out, "includelib kernel32.lib", "");
-		Out::WriteLine(out, "includelib msvcrt.lib", "");
+		Out::WriteLine(out, "includelib libucrt.lib", "");
 		Out::WriteLine(out, "includelib library.lib", "");
 	}
 	void protos(Out::OUT out, IT::IdTable IT, LT::LexTable LT)
@@ -22,6 +22,27 @@ namespace Gen
 			strcpy_s((char*)name, 7, (const char*)IT.library[i].name);
 			Out::WriteLine(out, "extrn ", (const char*)name, " : proc", "");
 		}
+		Out::WriteLine(out, "extrn ", "int_output", " : proc", "");
+		Out::WriteLine(out, "extrn ", "char_output", " : proc", "");
+		Out::WriteLine(out, "extrn ", "str_output", " : proc", "");
+		Out::WriteLine(out, "extrn ", "int_less", " : proc", "");
+		Out::WriteLine(out, "extrn ", "int_eless", " : proc", "");
+		Out::WriteLine(out, "extrn ", "int_more", " : proc", "");
+		Out::WriteLine(out, "extrn ", "int_emore", " : proc", "");
+		Out::WriteLine(out, "extrn ", "sym_less", " : proc", "");
+		Out::WriteLine(out, "extrn ", "sym_eless", " : proc", "");
+		Out::WriteLine(out, "extrn ", "sym_more", " : proc", "");
+		Out::WriteLine(out, "extrn ", "sym_emore", " : proc", "");
+		Out::WriteLine(out, "extrn ", "str_less", " : proc", "");
+		Out::WriteLine(out, "extrn ", "str_eless", " : proc", "");
+		Out::WriteLine(out, "extrn ", "str_more", " : proc", "");
+		Out::WriteLine(out, "extrn ", "str_emore", " : proc", "");
+		Out::WriteLine(out, "extrn ", "int_equals", " : proc", "");
+		Out::WriteLine(out, "extrn ", "int_nequals", " : proc", "");
+		Out::WriteLine(out, "extrn ", "sym_equals", " : proc", "");
+		Out::WriteLine(out, "extrn ", "sym_nequals", " : proc", "");
+		Out::WriteLine(out, "extrn ", "str_equals", " : proc", "");
+		Out::WriteLine(out, "extrn ", "str_nequals", " : proc", "");
 		Out::WriteLine(out, ";--------------------------------", "");
 	}
 	void consts(Out::OUT out, IT::IdTable IT)
@@ -89,7 +110,7 @@ namespace Gen
 		i++;
 		int ITind = func.idxTI;
 		char* begin = new char[16];
-		sprintf_s(begin, 16, "%s proc :", IT.table[func.idxTI].id);
+		sprintf_s(begin, 16, "%s proc ", IT.table[func.idxTI].id);
 		Out::WriteLine(out, (const char*)begin, "");
 		while (LT.table[i].lexema[0] != LEX_RIGHTHESIS)
 		{
@@ -151,7 +172,7 @@ namespace Gen
 			{
 				Out::WriteLine(out, "mov eax, 0", "");
 				Out::WriteLine(out, "mov al, ", source, "");
-				Out::WriteLine(out, "mov ", dest, ", eax", "");
+				Out::WriteLine(out, "mov ", dest, ", al", "");
 			}break;
 			}
 			i += 2;																	// перескочили на следующую после выражения лексему
@@ -178,12 +199,12 @@ namespace Gen
 			{
 				Out::WriteLine(out, "mov eax, 0", "");
 				Out::WriteLine(out, "mov al, ", (const char*)IT.table[LT.table[i].idxTI].fullID, "");
-				Out::WriteLine(out, "mov ", dest, ", eax", "");
+				Out::WriteLine(out, "mov ", dest, ", al", "");
 			}break;
 			case LT::LITTYPE::S:
 			{
 				Out::WriteLine(out, "mov eax, OFFSET ", (const char*)IT.table[LT.table[i].idxTI].fullID, "");
-				Out::WriteLine(out, "mov %s, eax", dest, "");
+				Out::WriteLine(out, "mov ", dest, ", eax", "");
 			}break;
 			}
 			i += 2;																	// перескочили на следующую после выражения лексему
@@ -210,7 +231,7 @@ namespace Gen
 						 {
 							 Out::WriteLine(out, "push ", par1, "");
 							 Out::WriteLine(out, "push ", par2, "");
-							 if(!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call int_less", "");
+							 if(!strcmp(LT.table[i].operation, "< ")) Out::WriteLine(out, "call int_less", "");
 							 else Out::WriteLine(out, "call int_more", "");
 						 }
 						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
@@ -218,14 +239,16 @@ namespace Gen
 							 if(LT.table[i + 1].littype == LT::LITTYPE::NOT) Out::WriteLine(out, "push ", par1, "");
 							 else Out::WriteLine(out, "push OFFSET ", par1, "");
 							 Out::WriteLine(out, "push ", par2, "");
-							 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call str_less", "");
+							 if (!strcmp(LT.table[i].operation, "< ")) Out::WriteLine(out, "call str_less", "");
 							 else Out::WriteLine(out, "call str_more", "");
 						 }
 						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 						 {
-							 Out::WriteLine(out, "push ", par1, "");
-							 Out::WriteLine(out, "push ", par2, "");
-							 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call sym_less", "");
+							 Out::WriteLine(out, "mov al, ", par1, "");
+							 Out::WriteLine(out, "mov bl, ", par2, "");
+							 Out::WriteLine(out, "push eax", "");
+							 Out::WriteLine(out, "push ebx","");
+							 if (!strcmp(LT.table[i].operation, "< ")) Out::WriteLine(out, "call sym_less", "");
 							 else Out::WriteLine(out, "call sym_more", "");
 						 }
 						 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -248,8 +271,10 @@ namespace Gen
 						 }
 						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 						 {
-							 Out::WriteLine(out, "push ", par1, "");
-							 Out::WriteLine(out, "push ", par2, "");
+							 Out::WriteLine(out, "mov al, ", par1, "");
+							 Out::WriteLine(out, "mov bl, ", par2, "");
+							 Out::WriteLine(out, "push eax", "");
+							 Out::WriteLine(out, "push ebx", "");
 							 Out::WriteLine(out, "call sym_eless", "");
 						 }
 						 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -272,8 +297,10 @@ namespace Gen
 						 }
 						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 						 {
-							 Out::WriteLine(out, "push ", par1, "");
-							 Out::WriteLine(out, "push ", par2, "");
+							 Out::WriteLine(out, "mov al, ", par1, "");
+							 Out::WriteLine(out, "mov bl, ", par2, "");
+							 Out::WriteLine(out, "push eax", "");
+							 Out::WriteLine(out, "push ebx", "");
 							 Out::WriteLine(out, "call sym_emore", "");
 						 }
 						 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -297,8 +324,10 @@ namespace Gen
 						 }
 						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 						 {
-							 Out::WriteLine(out, "push ", par1, "");
-							 Out::WriteLine(out, "push ", par2, "");
+							 Out::WriteLine(out, "mov al, ", par1, "");
+							 Out::WriteLine(out, "mov bl, ", par2, "");
+							 Out::WriteLine(out, "push eax", "");
+							 Out::WriteLine(out, "push ebx", "");
 							 Out::WriteLine(out, "call sym_equals", "");
 						 }
 						 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -321,8 +350,10 @@ namespace Gen
 						 }
 						 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 						 {
-							 Out::WriteLine(out, "push ", par1, "");
-							 Out::WriteLine(out, "push ", par2, "");
+							 Out::WriteLine(out, "mov al, ", par1, "");
+							 Out::WriteLine(out, "mov bl, ", par2, "");
+							 Out::WriteLine(out, "push eax", "");
+							 Out::WriteLine(out, "push ebx", "");
 							 Out::WriteLine(out, "call sym_nequals", "");
 						 }
 						 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -361,9 +392,11 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par1, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
-					 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call sym_less", "");
+					 Out::WriteLine(out, "mov al, ", par1, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
+					 if (!strcmp(LT.table[i].operation, "< ")) Out::WriteLine(out, "call sym_less", "");
 					 else Out::WriteLine(out, "call sym_more", "");
 				 }
 				 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -386,8 +419,10 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par1, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par1, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_eless", "");
 				 }
 				 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -410,8 +445,10 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par1, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par1, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_emore", "");
 				 }
 				 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -434,8 +471,10 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par1, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par1, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_equals", "");
 				 }
 				 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -458,8 +497,10 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par1, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par1, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_nequals", "");
 				 }
 				 Out::WriteLine(out, "mov ", dest, ", eax", "");
@@ -469,14 +510,22 @@ namespace Gen
 			 }
 		else if (callF)						// i = i..i@b/i###;
 		{
+		char* dest = new char[15];
+		if (IT.table[LT.table[destination].idxTI].idtype == IT::IDTYPE::P) strcpy_s(dest, 15, IT.table[LT.table[destination].idxTI].id);
+		else strcpy_s(dest, 15, (char*)IT.table[LT.table[destination].idxTI].fullID);
 			while(LT.table[i].lexema[0] != '@')
 			{
 				// пушить в стек пока не нашли собачку, потом вызов функции и переход на следующую строку
 				char *par = new char[12];
 				if (IT.table[LT.table[i].idxTI].idtype == IT::IDTYPE::P) strcpy_s(par, 12, IT.table[LT.table[i].idxTI].id);
 				else strcpy_s(par, 12, (char*)IT.table[LT.table[i].idxTI].fullID);
-				if(LT.table[i].littype != LT::LITTYPE::S) Out::WriteLine(out, "push ", par, "");
-				else Out::WriteLine(out, "push OFFSET", par, "");
+				if(LT.table[i].littype != LT::LITTYPE::S && LT.table[i].littype != LT::LITTYPE::SY) Out::WriteLine(out, "push ", par, "");
+				else if(LT.table[i].littype != LT::LITTYPE::S)Out::WriteLine(out, "push OFFSET ", par, "");
+				else if (LT.table[i].littype == LT::LITTYPE::SY)
+				{
+					Out::WriteLine(out, "mov al, ", par, "");
+					Out::WriteLine(out, "push eax", "");
+				}
 				i++;
 			}
 			i++;			//перешли на вызов функции
@@ -484,14 +533,14 @@ namespace Gen
 			{
 			case LEX_STRCAT:
 			{
-				Out::WriteLine(out, "call ", (const char*)IT.library[IT.Fhere(IT.table[LT.table[i].idxTI].libname)].name, "");
+				Out::WriteLine(out, "call ", (const char*)IT.library[IT.Lhere(IT.table[LT.table[i].idxTI].libname)].name, "");
 			}break;
 			case LEX_ID:
 			{
 				Out::WriteLine(out, "call ", (const char*)IT.funcs[IT.table[LT.table[i].idxTI].Funcind].name, "");
 			}break;
 			}
-			Out::WriteLine(out, "mov ", (const char*)IT.table[LT.table[destination].idxTI].id, ", eax", "");
+			Out::WriteLine(out, "mov ", dest, ", eax", "");
 			while (LT.table[i].lexema[0] != LEX_SEMOCOLON) i++;					// остановимся на ;
 			i++;																// перешли на следующую строку
 		}
@@ -512,12 +561,13 @@ namespace Gen
 		}break;
 		case IT::IDDATATYPE::SYM:
 		{
-			Out::WriteLine(out, "push ", par, "");
+			Out::WriteLine(out, "mov al, ", par, "");
+			Out::WriteLine(out, "push eax", "");
 			Out::WriteLine(out, "call char_output", "");
 		}break;
 		case IT::IDDATATYPE::STR:
 		{
-			if(LT.table[i].littype == LT::LITTYPE::S) Out::WriteLine(out, "push OFFSET", par, "");
+			if(LT.table[i].littype == LT::LITTYPE::S) Out::WriteLine(out, "push OFFSET ", par, "");
 			else Out::WriteLine(out, "push ", par, "");
 			Out::WriteLine(out, "call str_output", "");
 		}break;
@@ -529,6 +579,10 @@ namespace Gen
 		//i - if
 		char* orig = new char[5];			//для оригинальной метки
 		sprintf_s(orig, 5, "%d", i);
+		int count = i;
+		bool els = false;
+		while (LT.table[count].lexema[0] != LEX_BRACELET) count++;
+		if (LT.table[count + 1].lexema[0] == LEX_ELSE) els = true;
 		i += 2;			// перешли на первую лексему выражения
 		if ((LT.table[i].lexema[0] == LEX_ID || LT.table[i].lexema[0] == LEX_LITERAL) && LT.table[i + 1].lexema[0] == LEX_RIGHTHESIS)// if(i/l)=> проверка значения
 		{
@@ -541,14 +595,16 @@ namespace Gen
 			{
 				Out::WriteLine(out, "mov eax, ", par, "");
 				Out::WriteLine(out, "cmp eax, 0", "");
-				Out::WriteLine(out, "jne ELSE", (const char*)orig, ":", "");
+				if(els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+				else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 			}break;
 			case IT::IDDATATYPE::SYM:
 			{
 				Out::WriteLine(out, "mov eax, 0", "");
 				Out::WriteLine(out, "mov al, ", par, "");
 				Out::WriteLine(out, "cmp eax, 0", "");
-				Out::WriteLine(out, "jne ELSE", (const char*)orig, ":", "");
+				if (els) Out::WriteLine(out, "je ELSE", (const char*)orig,  "");
+				else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 			}break;
 			case IT::IDDATATYPE::STR:
 			{
@@ -556,14 +612,16 @@ namespace Gen
 				{
 					Out::WriteLine(out, "mov eax, ", par, "");
 					Out::WriteLine(out, "cmp [eax], 0", "");
-					Out::WriteLine(out, "jne ELSE", (const char*)orig, ":", "");
+					if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+					else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 				}
 				else
 				{
 					Out::WriteLine(out, "mov eax, 0", "");
 					Out::WriteLine(out, "mov al, ", par, "");
 					Out::WriteLine(out, "cmp eax, 0", "");
-					Out::WriteLine(out, "jne ELSE", (const char*)orig, ":", "");
+					if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+					else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 				}
 			}break;
 			}
@@ -587,8 +645,8 @@ namespace Gen
 					if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::INT)
 					{
 						Out::WriteLine(out, "push ", par2, "");
-						Out::WriteLine(out, "push ", par2, "");
-						if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call int_less", "");
+						Out::WriteLine(out, "push ", par1, "");
+						if (!strcmp(LT.table[i+1].operation, "< ")) Out::WriteLine(out, "call int_less", "");
 						else Out::WriteLine(out, "call int_more", "");
 					}
 					else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
@@ -596,18 +654,21 @@ namespace Gen
 						if(LT.table[i + 2].littype == LT::LITTYPE::NOT) Out::WriteLine(out, "push ", par2, "");
 						else Out::WriteLine(out, "push OFFSET", par2, "");
 						Out::WriteLine(out, "push ", par1, "");
-						if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call str_less", "");
+						if (!strcmp(LT.table[i+1].operation, "< ")) Out::WriteLine(out, "call str_less", "");
 						else Out::WriteLine(out, "call str_more", "");
 					}
 					else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 					{
-						Out::WriteLine(out, "push ", par2, "");
-						Out::WriteLine(out, "push ", par1, "");
-						if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call sym_less", "");
+						Out::WriteLine(out, "mov al, ", par2, "");
+						Out::WriteLine(out, "mov bl, ", par1, "");
+						Out::WriteLine(out, "push eax", "");
+						Out::WriteLine(out, "push ebx", "");
+						if (!strcmp(LT.table[i+1].operation, "< ")) Out::WriteLine(out, "call sym_less", "");
 						else Out::WriteLine(out, "call sym_more", "");
 					}
 					Out::WriteLine(out, "cmp eax, 0", "");
-					Out::WriteLine(out, "je ELSE", (const char*)orig, ":", "");
+					if (els) Out::WriteLine(out, "je ELSE", (const char*)orig,  "");
+					else Out::WriteLine(out, "je AFTER", (const char*)orig, "");
 					i += 5;				//на следующую строчку - т.е в блок иф
 				}break;
 				case LEX_ELESS:
@@ -627,12 +688,15 @@ namespace Gen
 					}
 					else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 					{
-						Out::WriteLine(out, "push ", par2, "");
-						Out::WriteLine(out, "push ", par1, "");
+						Out::WriteLine(out, "mov al, ", par2, "");
+						Out::WriteLine(out, "mov bl, ", par1, "");
+						Out::WriteLine(out, "push eax", "");
+						Out::WriteLine(out, "push ebx", "");
 						Out::WriteLine(out, "call sym_eless", "");
 					}
 					Out::WriteLine(out, "cmp eax, 0", "");
-					Out::WriteLine(out, "je ELSE", (const char*)orig, ":", "");
+					if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+					else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 					i += 5;
 				}break;
 				case LEX_EMORE:
@@ -652,12 +716,15 @@ namespace Gen
 					}
 					else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 					{
-						Out::WriteLine(out, "push ", par2, "");
-						Out::WriteLine(out, "push ", par1, "");
+						Out::WriteLine(out, "mov al, ", par2, "");
+						Out::WriteLine(out, "mov bl, ", par1, "");
+						Out::WriteLine(out, "push eax", "");
+						Out::WriteLine(out, "push ebx", "");
 						Out::WriteLine(out, "call sym_emore", "");
 					}
 					Out::WriteLine(out, "cmp eax, 0", "");
-					Out::WriteLine(out, "je ELSE", (const char*)orig, ":", "");
+					if (els) Out::WriteLine(out, "je ELSE", (const char*)orig,  "");
+					else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 					i += 5;
 				}break;
 				case LEX_DEQUALS:
@@ -677,12 +744,15 @@ namespace Gen
 					}
 					else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 					{
-						Out::WriteLine(out, "push ", par2, "");
-						Out::WriteLine(out, "push ", par1, "");
+						Out::WriteLine(out, "mov al, ", par2, "");
+						Out::WriteLine(out, "mov bl, ", par1, "");
+						Out::WriteLine(out, "push eax", "");
+						Out::WriteLine(out, "push ebx", "");
 						Out::WriteLine(out, "call sym_equals", "");
 					}
 					Out::WriteLine(out, "cmp eax, 0", "");
-					Out::WriteLine(out, "je ELSE", (const char*)orig, ":", "");
+					if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+					else Out::WriteLine(out, "je AFTER", (const char*)orig, "");
 					i += 5;
 				}break;
 				case LEX_NEQUALS:
@@ -702,12 +772,15 @@ namespace Gen
 					}
 					else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 					{
-						Out::WriteLine(out, "push ", par2, "");
-						Out::WriteLine(out, "push ", par1, "");
+						Out::WriteLine(out, "mov al, ", par2, "");
+						Out::WriteLine(out, "mov bl, ", par1, "");
+						Out::WriteLine(out, "push eax", "");
+						Out::WriteLine(out, "push ebx", "");
 						Out::WriteLine(out, "call sym_nequals", "");
 					}
 					Out::WriteLine(out, "cmp eax, 0", "");
-					Out::WriteLine(out, "je ELSE", (const char*)orig, ":", "");
+					if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+					else Out::WriteLine(out, "je AFTER", (const char*)orig, "");
 					i += 5;
 
 				}break;
@@ -728,7 +801,7 @@ namespace Gen
 				 {
 					 Out::WriteLine(out, "push ", par2, "");
 					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
-					 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call int_less", "");
+					 if (!strcmp(LT.table[i+1].operation, "< ")) Out::WriteLine(out, "call int_less", "");
 					 else Out::WriteLine(out, "call int_more", "");
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::STR)
@@ -736,18 +809,21 @@ namespace Gen
 					 Out::WriteLine(out, "push OFFSET", par2, "");
 					 if(LT.table[i].littype!=LT::LITTYPE::NOT) Out::WriteLine(out, "push OFFSET", (const char*)IT.table[LT.table[i].idxTI].id, "");
 					 else Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
-					 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call str_less", "");
+					 if (!strcmp(LT.table[i+1].operation, "< ")) Out::WriteLine(out, "call str_less", "");
 					 else Out::WriteLine(out, "call str_more", "");
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par2, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
-					 if (!strcmp(LT.table[i].operation, "<")) Out::WriteLine(out, "call sym_less", "");
+					 Out::WriteLine(out, "mov al, ", par2, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax","");
+					 Out::WriteLine(out, "push ebx", "");
+					 if (!strcmp(LT.table[i+1].operation, "< ")) Out::WriteLine(out, "call sym_less", "");
 					 else Out::WriteLine(out, "call sym_more", "");
 				 }
 				 Out::WriteLine(out, "cmp eax, 0", "");
-				 Out::WriteLine(out, "jne ELSE", "");
+				 if (els) Out::WriteLine(out, "je ELSE", (const char*)orig,  "");
+				 else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 				 i += 5;				//на следующую строчку - т.е в блок иф
 			 }break;
 			 case LEX_ELESS:
@@ -767,12 +843,15 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par2, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par2, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_eless", "");
 				 }
 				 Out::WriteLine(out, "cmp eax, 0", "");
-				 Out::WriteLine(out, "jne ELSE", "");
+				 if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+				 else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 				 i += 5;
 			 }break;
 			 case LEX_EMORE:
@@ -792,12 +871,15 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par2, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par2, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_emore", "");
 				 }
 				 Out::WriteLine(out, "cmp eax, 0", "");
-				 Out::WriteLine(out, "jne ELSE", "");
+				 if (els) Out::WriteLine(out, "je ELSE", (const char*)orig,  "");
+				 else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 				 i += 5;
 			 }break;
 			 case LEX_DEQUALS:
@@ -817,12 +899,15 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par2, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par2, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_equals", "");
 				 }
 				 Out::WriteLine(out, "cmp eax, 0", "");
-				 Out::WriteLine(out, "jne ELSE", "");
+				 if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+				 else Out::WriteLine(out, "je AFTER", (const char*)orig, "");
 				 i += 5;
 			 }break;
 			 case LEX_NEQUALS:
@@ -842,12 +927,15 @@ namespace Gen
 				 }
 				 else if (IT.table[LT.table[i].idxTI].iddatatype == IT::IDDATATYPE::SYM)
 				 {
-					 Out::WriteLine(out, "push ", par2, "");
-					 Out::WriteLine(out, "push ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "mov al, ", par2, "");
+					 Out::WriteLine(out, "mov bl, ", (const char*)IT.table[LT.table[i].idxTI].id, "");
+					 Out::WriteLine(out, "push eax", "");
+					 Out::WriteLine(out, "push ebx", "");
 					 Out::WriteLine(out, "call sym_nequals", "");
 				 }
 				 Out::WriteLine(out, "cmp eax, 0", "");
-				 Out::WriteLine(out, "jne ELSE", "");
+				 if (els) Out::WriteLine(out, "je ELSE", (const char*)orig, "");
+				 else Out::WriteLine(out, "je AFTER", (const char*)orig,  "");
 				 i += 5;
 
 			 }break;
@@ -889,9 +977,10 @@ namespace Gen
 				}break;
 				}
 			}
-			Out::WriteLine(out, "AFTER", (const char*)orig, ":", "");
+			
 			i++;				// перешли на лексему после окончания блока элс
 		}
+		Out::WriteLine(out, "AFTER", (const char*)orig, ":", "");
 	}
 	void ret(int &i, Out::OUT out, LT::LexTable LT, IT::IdTable IT)
 	{
@@ -984,9 +1073,10 @@ namespace Gen
 	{
 		Out::WriteLine(out, "main PROC", "");
 		Out::WriteLine(out, "START:", "");
+		i += 2;
 		while (LT.table[i].lexema[0] != LEX_RETURN)
 		{
-			i += 2;
+			
 			switch (LT.table[i].lexema[0])		//какая лексема стоит после {? n, i, o, I - варианты, n пропускаем
 			{
 			case LEX_NEW:

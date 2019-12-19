@@ -30,7 +30,7 @@ namespace Form
 		int k = 0;
 		int fullLen = strlen((const char*)prefix) + strlen((const char*)all_units.words[LT.table[i].globalIndex]);//+1
 		for (; k < strlen((const char*)prefix); k++) en.fullID[k] = prefix[k];
-		en.fullID[k++] = '~';
+		en.fullID[k++] = '_';
 		for (; k < fullLen + 1; k++) en.fullID[k] = all_units.words[LT.table[i].globalIndex][k - strlen((const char*)prefix) - 1]; // поменять индексы
 		en.fullID[k] = 0x00;
 	}
@@ -96,7 +96,8 @@ namespace Form
 			}
 			else if (*LT.table[i].lexema == LEX_ENTER)
 			{
-				prefix = all_units.words[LT.table[i].globalIndex];
+				strcpy_s((char*)prefix, 11, "ent");
+				//prefix = all_units.words[LT.table[i].globalIndex];
 			}
 			if (LT.table[i].idxTI != TI_NULLIDX) // если элемент - идентификатор 
 			{
