@@ -33,6 +33,7 @@ namespace In
 				case IN::B: rc->text[i] = buf; i++; break;
 				case IN::Q: rc->text[i] = buf; i++; break;
 				case IN::OQ: rc->text[i] = buf; i++; break;
+				case IN::M: rc->text[i] = buf; i++; break;
 				default:rc->text[i] = (unsigned char)rc->code[(unsigned char)buf]; i++; break;
 				}
 				c++;

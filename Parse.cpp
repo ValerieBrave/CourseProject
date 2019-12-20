@@ -136,7 +136,18 @@ namespace Parse
 	{
 		unsigned char* rc = new unsigned char[strlen((const char*)in.text)];
 		int i = 0;
-		if (in.code[pos[0]] == In::IN::Q)//"
+		if (in.code[pos[0]] == In::IN::M)
+		{
+			rc[0] = pos[0];
+			i++;
+			while (in.code[pos[i]] != In::IN::B && in.code[pos[i]] != In::IN::R)
+			{
+				rc[i] = pos[i];
+				i++;
+			}
+			rc[i] = 0x00;
+		}
+		else if (in.code[pos[0]] == In::IN::Q)//"
 		{
 			rc[0] = pos[0];
 			i++;

@@ -82,11 +82,12 @@ namespace Sem
 				else if(LT.table[i + 2].lexema[0] != LEX_RIGHTHESIS)
 				{
 					if (IT.funcs[IT.table[LT.table[i].idxTI].Funcind].types[0] == IT::IDDATATYPE::DEF) throw ERROR_THROW_IN(705, LT.table[i].sn, i)
-					int begin = i; i++;
+						int begin = i, p = 0; i++;
 					while (LT.table[i].lexema[0] != LEX_RIGHTHESIS)
 					{
 						if (LT.table[i].lexema[0] == LEX_LITERAL || LT.table[i].lexema[0] == LEX_ID)
 						{
+							p++;
 							int libind = IT.Lhere(all_units.words[func.globalIndex]);
 							if(IT.table[func.idxTI].idtype!=IT::IDTYPE::LIB &&
 								IT.table[LT.table[i].idxTI].iddatatype != IT.funcs[IT.table[func.idxTI].Funcind].types[params.size()]) throw ERROR_THROW_IN(706, func.sn, i)
@@ -98,6 +99,7 @@ namespace Sem
 						}
 						i++;
 					}
+					if (p != IT.funcs[IT.table[func.idxTI].Funcind].params) throw ERROR_THROW_IN(708, func.sn, i)
 					int end = i;
 					while (!params.empty())
 					{

@@ -176,7 +176,7 @@ FST::RELATION('U', 2), FST::RELATION('V', 2), \
 FST::RELATION('W', 2), FST::RELATION('X', 2), \
 FST::RELATION('Y', 2), FST::RELATION('Z', 2)),\
 							FST::NODE()
-#define GRAPH_NUMBER8 FST::NODE(1, FST::RELATION('0', 1)),\
+#define GRAPH_NUMBER8 FST::NODE(2, FST::RELATION('0', 1), FST::RELATION('-', 1)),\
 					 FST::NODE(16, FST::RELATION('0', 2), FST::RELATION('1', 2),\
 								   FST::RELATION('2', 2), FST::RELATION('3', 2),\
 								   FST::RELATION('4', 2), FST::RELATION('5', 2),\
@@ -194,8 +194,8 @@ FST::RELATION('Y', 2), FST::RELATION('Z', 2)),\
 								   FST::RELATION('4', 3), FST::RELATION('5', 3),\
 								   FST::RELATION('6', 3), FST::RELATION('7', 3)),\
 								   FST::NODE()
-#define GRAPH_NUMBER2 FST::NODE(4, FST::RELATION('0', 1), FST::RELATION('1', 1),\
-								   FST::RELATION('0', 2), FST::RELATION('1', 2)),\
+#define GRAPH_NUMBER2 FST::NODE(5, FST::RELATION('0', 1), FST::RELATION('1', 1),\
+								   FST::RELATION('0', 2), FST::RELATION('1', 2), FST::RELATION('-', 1)),\
 					  FST::NODE(4, FST::RELATION('0', 1), FST::RELATION('1', 1),\
 								   FST::RELATION('0', 2), FST::RELATION('1', 2)),\
 					  FST::NODE()

@@ -4,7 +4,7 @@
 #define IN_CODE_TABLE {\
 IN::T, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::R, IN::F, IN::F, IN::F, IN::F, IN::F,\
 IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F, IN::F,\
-IN::B, IN::R, IN::Q, IN::F, IN::F, IN::F, IN::F, IN::OQ, IN::R, IN::R, IN::R, IN::R, IN::R, IN::R, IN::F, IN::R,\
+IN::B, IN::R, IN::Q, IN::F, IN::F, IN::F, IN::F, IN::OQ, IN::R, IN::R, IN::R, IN::R, IN::R, IN::M, IN::F, IN::R,\
 IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::F, IN::R, IN::R, IN::R, IN::R, IN::F,\
 IN::F, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T,\
 IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::T, IN::F, IN::F, IN::F, IN::F, IN::F,\
@@ -23,7 +23,7 @@ namespace In
 {
 	struct IN // исходные данные
 	{
-		enum { B = 300, R = 512, Q = 1000, OQ=1002, T = 1024, F = 2048, I = 4096 }; // Т-допустимый символ, F-недопустимый, I-игнорировать, R-сепаратор переносимый, B - пробел(непереносимый), Q -кавычка двойная, OQ-одинарная
+		enum { B = 300, R = 512, Q = 1000, OQ=1002, T = 1024, F = 2048, I = 4096 , M = 1003}; // Т-допустимый символ, F-недопустимый, I-игнорировать, R-сепаратор переносимый, B - пробел(непереносимый), Q -кавычка двойная, OQ-одинарная
 		int size;  // размер исходного кода
 		int lines;  // количество строк
 		int ignor;  // количество проигнорированных символов
