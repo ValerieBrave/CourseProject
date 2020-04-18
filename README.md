@@ -1,13 +1,17 @@
 # CourseProject
 This is my course project for "programming languages" dicipline. The task was to develop simple compiler for my special programming language.
-Before i started, i was given specification for my languge. There were some points like:
-1) realization of conditional operator
-2) realization of such operators as ==, !=, <=, >=, <, > (no algebra)
-3) at least two types of data (i made integer, string and symbol)
-4) number literals must be represented in binary and octal systems.
+
+##Before i started, i was given specification for my languge. There were some points like:
+
++ realization of conditional operator
++ realization of such operators as ==, !=, <=, >=, <, > (no algebra)
++ at least two types of data (i made integer, string and symbol)
++ number literals must be represented in binary and octal systems.
 So, what i've made? I created an application that reads file with program written in my SVV-2019 languge, then carries out lexical analysis,
 syntax and semantical analysis, then generates code in Assembly language.
-Let me describe my files:
+
+###Let me describe my files:
+
 1) Parm.h + Parm.cpp - contain methods for reading IN params and creating names for OUT and LOG, if necessery
 2) In.h + In.cpp - contain methods for reading IN file and checking for forbidden symbols
 3) Error.h + Error.cpp - my personal system of generating exceptions
@@ -17,15 +21,16 @@ Let me describe my files:
 7) LT.h + LT.cpp - description of lexems table
 8) IT.h + IT.cpp - description of identificators table
 9) Parse.h + Parse.cpp - contain methods for parsing IN file into array of single words, then passing them into array of finite state machines.
-If the word is defined, it goes to table of lexems
-ITform.h + ITform.cpp - methods for creating table of identificators and literals from table of lexems
-MFST.h + MFST.cpp - description of finite state machines with store memory and it regime of work
-GRB.h + GRB.cpp - grammatics for SVV-2019 language
-Semantica.h + Semantica.cpp - methods for semantical analysis of code
-Generation.h + Generation.cpp - methods for assembly code generation
-Automats.h - graphs for fst
-//---------------------------------------------
+10) If the word is defined, it goes to table of lexems
+11) ITform.h + ITform.cpp - methods for creating table of identificators and literals from table of lexems
+12) MFST.h + MFST.cpp - description of finite state machines with store memory and it regime of work
+13) GRB.h + GRB.cpp - grammatics for SVV-2019 language
+14) Semantica.h + Semantica.cpp - methods for semantical analysis of code
+15) Generation.h + Generation.cpp - methods for assembly code generation
+16) Automats.h - graphs for fst
+
 Here is my test case:
+```
 integer function inmax(integer a, integer b)
 {
 new integer max;
@@ -90,8 +95,10 @@ new integer copy;
 copy = cpy(strf, stre);
 return 0;
 }
-//---------------------------------
-For testing an assembly code you will need static library:
+```
+
+##For testing an assembly code you will need static library:
+```
 #include "stdafx.h"
 #include <iostream>
 extern "C"
@@ -306,8 +313,10 @@ extern "C"
 		}
 	}
 }
-//------------------------------------------------------------------------------
-this is what you get after generation
+```
+
+##This is what you get after generation
+```
 .586
 .MODEL flat, stdcall
 includelib kernel32.lib
@@ -472,7 +481,8 @@ push nu359
 call ExitProcess
 main ENDP
 end main
-//---------------------------------------------------------------
+```
+
 I hope i've tested all cases, so generated code should be usable
 Sorry, all mistakes are written in russian
 I've spent a lot of time working on this project, so if you notice some mistakes in code generation, please contact me, i'll try to fix it
