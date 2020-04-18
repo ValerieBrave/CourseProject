@@ -8,15 +8,15 @@ Before i started, i was given specification for my languge. There were some poin
 So, what i've made? I created an application that reads file with program written in my SVV-2019 languge, then carries out lexical analysis,
 syntax and semantical analysis, then generates code in Assembly language.
 Let me describe my files:
-1)Parm.h + Parm.cpp - contain methods for reading IN params and creating names for OUT and LOG, if necessery
-2)In.h + In.cpp - contain methods for reading IN file and checking for forbidden symbols
-3)Error.h + Error.cpp - my personal system of generating exceptions
-4)Log.h + Log.cpp - contain methods for generating logger
-5)Out.h + Out.cpp - contain methods for generating asm file
-6)FST.h + FST.cpp - description of finite state machines and regime of their work
-7)LT.h + LT.cpp - description of lexems table
-8)IT.h + IT.cpp - description of identificators table
-9)Parse.h + Parse.cpp - contain methods for parsing IN file into array of single words, then passing them into array of finite state machines.
+1) Parm.h + Parm.cpp - contain methods for reading IN params and creating names for OUT and LOG, if necessery
+2) In.h + In.cpp - contain methods for reading IN file and checking for forbidden symbols
+3) Error.h + Error.cpp - my personal system of generating exceptions
+4) Log.h + Log.cpp - contain methods for generating logger
+5) Out.h + Out.cpp - contain methods for generating asm file
+6) FST.h + FST.cpp - description of finite state machines and regime of their work
+7) LT.h + LT.cpp - description of lexems table
+8) IT.h + IT.cpp - description of identificators table
+9) Parse.h + Parse.cpp - contain methods for parsing IN file into array of single words, then passing them into array of finite state machines.
 If the word is defined, it goes to table of lexems
 ITform.h + ITform.cpp - methods for creating table of identificators and literals from table of lexems
 MFST.h + MFST.cpp - description of finite state machines with store memory and it regime of work
