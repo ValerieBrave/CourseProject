@@ -1,16 +1,16 @@
 # CourseProject
 This is my course project for "programming languages" dicipline. The task was to develop simple compiler for my special programming language.
 
-##Before i started, i was given specification for my languge. There were some points like:
+Before i started, i was given specification for my languge. There were some points like:
 
 + realization of conditional operator
 + realization of such operators as ==, !=, <=, >=, <, > (no algebra)
 + at least two types of data (i made integer, string and symbol)
-+ number literals must be represented in binary and octal systems.
++ number literals must be represented in binary and octal systems.    
 So, what i've made? I created an application that reads file with program written in my SVV-2019 languge, then carries out lexical analysis,
 syntax and semantical analysis, then generates code in Assembly language.
 
-###Let me describe my files:
+Let me describe my files:
 
 1) Parm.h + Parm.cpp - contain methods for reading IN params and creating names for OUT and LOG, if necessery
 2) In.h + In.cpp - contain methods for reading IN file and checking for forbidden symbols
@@ -97,7 +97,7 @@ return 0;
 }
 ```
 
-##For testing an assembly code you will need static library:
+For testing an assembly code you will need static library:
 ```
 #include "stdafx.h"
 #include <iostream>
@@ -315,7 +315,7 @@ extern "C"
 }
 ```
 
-##This is what you get after generation
+This is what you get after generation
 ```
 .586
 .MODEL flat, stdcall
@@ -483,10 +483,9 @@ main ENDP
 end main
 ```
 
-I hope i've tested all cases, so generated code should be usable
-Sorry, all mistakes are written in russian
-I've spent a lot of time working on this project, so if you notice some mistakes in code generation, please contact me, i'll try to fix it
-Thanks for reading=)
+I hope i've tested all cases, so generated code should be usable.    
+Sorry, all mistakes are written in russian.    
+I've spent a lot of time working on this project, so if you notice some mistakes in code generation, please contact me.
 
 
 
